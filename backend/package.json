@@ -22,16 +22,19 @@
     "dotenv": "^16.4.7",
     "drizzle-orm": "^0.39.3",
     "express": "^5.2.1",
+    "helmet": "^8.1.0",
     "pg": "^8.13.1",
     "standardwebhooks": "^1.0.0",
     "stream-chat": "^8.57.6",
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/node": "^22.10.10",
     "@types/pg": "^8.11.10",
     "drizzle-kit": "^0.30.4",
+    "nodemon": "^3.1.14",
     "tsx": "^4.19.2",
     "typescript": "^5.7.3"
   }
