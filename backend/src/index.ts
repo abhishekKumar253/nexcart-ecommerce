@@ -5,13 +5,11 @@ import fs from "node:fs";
 import path from "node:path";
 import { clerkMiddleware } from "@clerk/express";
 import { clerkWebhookHandler } from "./webhooks/clerk";
-import helmet from "helmet";
 import { getEnv } from "./lib/env";
 
 const env = getEnv();
 const app = express();
 
-app.use(helmet());
 
 const rawJson = express.raw({ type: "application/json", limit: "1mb" });
 
