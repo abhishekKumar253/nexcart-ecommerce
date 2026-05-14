@@ -20,10 +20,7 @@ app.post("/webhooks/clerk", rawJson, (req, res) => {
 app.use(express.json());
 app.use(
   cors({
-    origin:
-      process.env.NODE_ENV === "development"
-        ? process.env.FRONTEND_URL
-        : "http://localhost:5173",
+    origin: env.FRONTEND_URL,
     credentials: true,
   })
 );

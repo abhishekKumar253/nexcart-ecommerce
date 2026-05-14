@@ -46,9 +46,6 @@ export function loadEnv() {
 let cachedEnv: Env | null = null;
 
 export function getEnv() {
-  if (!cachedEnv) {
-    cachedEnv = loadEnv();
-  }
-
+  cachedEnv ??= loadEnv();
   return cachedEnv;
 }
