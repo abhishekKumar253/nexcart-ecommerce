@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import fs from "node:fs";
 import path from "node:path";
+import helmet from "helmet";
 import { clerkMiddleware } from "@clerk/express";
 import { clerkWebhookHandler } from "./webhooks/clerk";
 import { getEnv } from "./lib/env";
@@ -10,6 +11,7 @@ import { getEnv } from "./lib/env";
 const env = getEnv();
 const app = express();
 
+app.use(helmet());
 
 const rawJson = express.raw({ type: "application/json", limit: "1mb" });
 
