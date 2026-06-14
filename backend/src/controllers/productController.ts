@@ -62,8 +62,7 @@ export async function getProductBySlug(
       .where(eq(products.slug, req.params.slug as string))
       .limit(1);
 
-    if (!row || !row.active)
-      return res.status(404).json({ error: "Not found" });
+    if (!row?.active) return res.status(404).json({ error: "Not found" });
 
     res.json({ product: row });
   } catch (e) {
