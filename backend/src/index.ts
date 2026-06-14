@@ -3,7 +3,6 @@ import express from "express";
 import cors from "cors";
 import fs from "node:fs";
 import path from "node:path";
-import helmet from "helmet";
 import { clerkMiddleware } from "@clerk/express";
 import { clerkWebhookHandler } from "./webhooks/clerk";
 import { getEnv } from "./lib/env";
@@ -11,7 +10,7 @@ import { getEnv } from "./lib/env";
 const env = getEnv();
 const app = express();
 
-app.use(helmet());
+app.disable("x-powered-by"); 
 
 const rawJson = express.raw({ type: "application/json", limit: "1mb" });
 
@@ -29,22 +28,22 @@ app.use(
 app.use(clerkMiddleware());
 
 const publicDir = path.join(process.cwd(), "public");
-if(fs.existsSync(publicDir)){
-  app.use(express.static(publicDir))
+if (fs.existsSync(publicDir)) {
+  app.use(express.static(publicDir));
 
   app.get("/{*any}", (req, res, next) => {
-    if(req.method !== "GET" && req.method !== "HEAD"){
+    if (req.method !== "GET" && req.method !== "HEAD") {
       next();
       return;
     }
 
-    if(req.path.startsWith("/api") || req.path.startsWith("/webhooks")){
+    if (req.path.startsWith("/api") || req.path.startsWith("/webhooks")) {
       next();
       return;
     }
 
-    res.sendFile(path.join(publicDir, "index.html"), (err) => next(err))
-  })
+    res.sendFile(path.join(publicDir, "index.html"), (err) => next(err));
+  });
 }
 
 app.listen(env.PORT || 5000, () => {
