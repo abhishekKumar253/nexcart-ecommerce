@@ -16,6 +16,7 @@ const CATALOG = [
     priceCents: 24900,
     imageUrl:
       "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80",
+    stock: 50, // 👈 Added
   },
   {
     slug: "nova-watch",
@@ -26,6 +27,7 @@ const CATALOG = [
     priceCents: 19900,
     imageUrl:
       "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80",
+    stock: 50, // 👈 Added
   },
   {
     slug: "pulse-speaker",
@@ -36,6 +38,7 @@ const CATALOG = [
     priceCents: 8900,
     imageUrl:
       "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=800&q=80",
+    stock: 50, // 👈 Added
   },
   {
     slug: "vertex-laptop-stand",
@@ -46,6 +49,7 @@ const CATALOG = [
     priceCents: 7900,
     imageUrl:
       "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=800&q=80",
+    stock: 50, // 👈 Added
   },
   {
     slug: "lumen-keyboard",
@@ -56,6 +60,7 @@ const CATALOG = [
     priceCents: 15900,
     imageUrl:
       "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=800&q=80",
+    stock: 50, // 👈 Added
   },
   {
     slug: "orbit-mouse",
@@ -66,6 +71,7 @@ const CATALOG = [
     priceCents: 6900,
     imageUrl:
       "https://images.unsplash.com/photo-1527814050087-3793815479db?w=800&q=80",
+    stock: 50, // 👈 Added
   },
   {
     slug: "cascade-monitor-lamp",
@@ -76,6 +82,7 @@ const CATALOG = [
     priceCents: 9900,
     imageUrl:
       "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&q=80",
+    stock: 50, // 👈 Added
   },
   {
     slug: "ember-kettle",
@@ -86,6 +93,7 @@ const CATALOG = [
     priceCents: 12900,
     imageUrl:
       "https://images.unsplash.com/photo-1556911220-bff31c812dba?w=800&q=80",
+    stock: 50, // 👈 Added
   },
   {
     slug: "linen-air-purifier",
@@ -96,6 +104,7 @@ const CATALOG = [
     priceCents: 22900,
     imageUrl:
       "https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=800&q=80",
+    stock: 50, // 👈 Added
   },
   {
     slug: "summit-backpack",
@@ -106,6 +115,7 @@ const CATALOG = [
     priceCents: 13900,
     imageUrl:
       "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&q=80",
+    stock: 50, // 👈 Added
   },
   {
     slug: "voyage-organizer",
@@ -116,6 +126,7 @@ const CATALOG = [
     priceCents: 4500,
     imageUrl:
       "https://images.unsplash.com/photo-1622560480605-d83c853bc5c3?w=800&q=80",
+    stock: 50, // 👈 Added
   },
   {
     slug: "apex-mirrorless",
@@ -126,6 +137,7 @@ const CATALOG = [
     priceCents: 149900,
     imageUrl:
       "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800&q=80",
+    stock: 50, // 👈 Added
   },
   {
     slug: "prime-lens-35",
@@ -136,6 +148,7 @@ const CATALOG = [
     priceCents: 79900,
     imageUrl:
       "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=800&q=80",
+    stock: 50, // 👈 Added
   },
   {
     slug: "nimbus-hub",
@@ -146,6 +159,7 @@ const CATALOG = [
     priceCents: 7900,
     imageUrl:
       "https://images.unsplash.com/photo-1591488320449-011701bb6704?w=800&q=80",
+    stock: 50, // 👈 Added
   },
   {
     slug: "solstice-power-bank",
@@ -156,6 +170,7 @@ const CATALOG = [
     priceCents: 8900,
     imageUrl:
       "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=800&q=80",
+    stock: 50, // 👈 Added
   },
   {
     slug: "echo-earbuds",
@@ -166,6 +181,7 @@ const CATALOG = [
     priceCents: 17900,
     imageUrl:
       "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=800&q=80",
+    stock: 50, // 👈 Added
   },
   {
     slug: "meridian-desk-mat",
@@ -176,6 +192,7 @@ const CATALOG = [
     priceCents: 5900,
     imageUrl:
       "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=800&q=80",
+    stock: 100, // 👈 Added (thoda zyada stock)
   },
   {
     slug: "atlas-water-bottle",
@@ -186,6 +203,7 @@ const CATALOG = [
     priceCents: 3900,
     imageUrl:
       "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=800&q=80",
+    stock: 50, // 👈 Added
   },
 ];
 
@@ -199,6 +217,7 @@ async function main() {
     currency: "usd",
     imageUrl: p.imageUrl,
     active: true,
+    stock: p.stock ?? 0, // 👈 Added
   }));
 
   for (const row of rows) {
@@ -215,6 +234,7 @@ async function main() {
           currency: row.currency,
           imageUrl: row.imageUrl,
           active: row.active,
+          stock: row.stock, // 👈 Added
         },
       });
   }
