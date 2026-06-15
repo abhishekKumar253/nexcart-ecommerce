@@ -79,6 +79,68 @@ async function fulfillCheckoutSession(
   });
 }
 
+async function handleOrderPaid(data: Record<string, unknown>, res: Response) {
+  const polarOrderId = typeof data.id === "string" ? data.id : undefined;
+  const checkoutId =
+    typeof data.checkout_id === "string" ? data.checkout_id : undefined;
+
+  if (await alreadyPaid(polarOrderId, checkoutId)) {
+    res.json({ ok: true, duplicate: true });
+    return;
+  }
+
+  const sessionId = checkoutSessionIdFromMetadata(data);
+  if (!sessionId) {
+    res.json({ ok: true });
+    return;
+  }
+
+  const ok = await fulfillCheckoutSession(sessionId, polarOrderId, checkoutId);
+
+  if (ok) {
+    res.json({ ok: true });
+    return;
+  }
+
+  if (await alreadyPaid(polarOrderId, checkoutId)) {
+    res.json({ ok: true, duplicate: true });
+    return;
+  }
+
+  console.error("Polar order.paid: could not fulfill checkout session", {
+    sessionId,
+    checkoutId,
+  });
+
+  res.status(500).json({ error: "Checkout fulfillment failed" });
+}
+
+function verifyWebhookSignature(req: Request, secret: string) {
+  const raw =
+    req.body instanceof Buffer ? req.body : Buffer.from(String(req.body));
+
+  const wh = new Webhook(Buffer.from(secret, "utf8").toString("base64"));
+
+  const id = headerString(req.headers, "webhook-id");
+  const ts = headerString(req.headers, "webhook-timestamp");
+  const sig = headerString(req.headers, "webhook-signature");
+
+  if (!id || !ts || !sig) {
+    throw new Error("Missing webhook headers");
+  }
+
+  wh.verify(raw, {
+    "webhook-id": id,
+    "webhook-timestamp": ts,
+    "webhook-signature": sig,
+  });
+
+  return JSON.parse(raw.toString("utf8")) as {
+    type: string;
+    data?: Record<string, unknown>;
+  };
+}
+
 export async function polarWebhookHandler(req: Request, res: Response) {
   const env = getEnv();
 
@@ -88,70 +150,11 @@ export async function polarWebhookHandler(req: Request, res: Response) {
       return;
     }
 
-    const raw =
-      req.body instanceof Buffer ? req.body : Buffer.from(String(req.body));
-    const wh = new Webhook(
-      Buffer.from(env.POLAR_WEBHOOK_SECRET, "utf8").toString("base64")
-    );
-
-    const id = headerString(req.headers, "webhook-id");
-    const ts = headerString(req.headers, "webhook-timestamp");
-    const sig = headerString(req.headers, "webhook-signature");
-
-    if (!id || !ts || !sig) {
-      res.status(400).json({ error: "Missing webhook headers" });
-      return;
-    }
-
-    wh.verify(raw, {
-      "webhook-id": id,
-      "webhook-timestamp": ts,
-      "webhook-signature": sig,
-    });
-
-    const event = JSON.parse(raw.toString("utf8")) as {
-      type: string;
-      data?: Record<string, unknown>;
-    };
+    const event = verifyWebhookSignature(req, env.POLAR_WEBHOOK_SECRET);
 
     if (event.type === "order.paid" && event.data) {
-      const data = event.data;
-      const polarOrderId = typeof data.id === "string" ? data.id : undefined;
-      const checkoutId =
-        typeof data.checkout_id === "string" ? data.checkout_id : undefined;
-
-      if (await alreadyPaid(polarOrderId, checkoutId)) {
-        res.json({ ok: true, duplicate: true });
-        return;
-      }
-
-      const sessionId = checkoutSessionIdFromMetadata(data);
-
-      if (sessionId) {
-        const ok = await fulfillCheckoutSession(
-          sessionId,
-          polarOrderId,
-          checkoutId
-        );
-
-        if (ok) {
-          res.json({ ok: true });
-          return;
-        }
-
-        if (await alreadyPaid(polarOrderId, checkoutId)) {
-          res.json({ ok: true, duplicate: true });
-          return;
-        }
-
-        console.error("Polar order.paid: could not fulfill checkout session", {
-          sessionId,
-          checkoutId,
-        });
-
-        res.status(500).json({ error: "Checkout fulfillment failed" });
-        return;
-      }
+      await handleOrderPaid(event.data, res);
+      return;
     }
 
     res.json({ ok: true });
