@@ -1,38 +1,58 @@
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  SignUpButton,
-  UserButton,
-  useAuth,
-} from "@clerk/clerk-react";
+import { useAuth } from "@clerk/clerk-react";
 import PageLoader from "./components/PageLoader";
 import Layout from "./components/Layout";
+import { Routes, Route, Navigate } from "react-router";
+import HomePage from "./pages/HomePage";
+import CartPage from "./pages/CartPage";
+import OrdersPage from "./pages/OrdersPage";
+import CheckoutReturnPage from "./pages/CheckoutReturnPage";
+import ProductDetailPage from "./pages/ProductDetailPage";
+import SentryDemoPage from "./pages/SentryDemoPage";
+import OrderDetailPage from "./pages/OrderDetailPage";
+import OrderSummaryPage from "./pages/OrderSummaryPage";
+import OrderChatPage from "./pages/OrderChatPage";
+import OrderVideoPage from "./pages/OrderVideoPage";
+import AdminProductsPage from "./pages/AdminProductsPage";
 
 function App() {
-  const { isLoaded } = useAuth();
+  const { isLoaded, isSignedIn } = useAuth();
 
-  if (!isLoaded) {
-    return <PageLoader />;
-  }
+  if (!isLoaded) return <PageLoader />;
 
   return (
     <Layout>
-      <header>
-        <SignedOut>
-          <SignInButton mode="modal" />
-          <SignUpButton mode="modal" />
-        </SignedOut>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/product/:slug" element={<ProductDetailPage />} />
+        <Route
+          path="/orders"
+          element={isSignedIn ? <OrdersPage /> : <Navigate to={"/"} replace />}
+        />
+        <Route path="/checkout/return" element={<CheckoutReturnPage />} />
 
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
-      </header>
+        <Route path="/demo-sentry" element={<SentryDemoPage />} />
 
-      <p className="text-red-500">Welcome to the App!</p>
-      <button className="bg-blue-500 text-white px-4 py-2 rounded">
-        Click me
-      </button>
+        <Route
+          path="/orders/:id/call"
+          element={
+            isSignedIn ? <OrderVideoPage /> : <Navigate to={"/"} replace />
+          }
+        />
+
+        <Route
+          path="/admin"
+          element={
+            isSignedIn ? <AdminProductsPage /> : <Navigate to="/" replace />
+          }
+        />
+
+        {/* NESTED ROUTES */}
+        <Route path="/orders/:id" element={<OrderDetailPage />}>
+          <Route index element={<OrderSummaryPage />} />
+          <Route path="chat" element={<OrderChatPage />} />
+        </Route>
+      </Routes>
     </Layout>
   );
 }
