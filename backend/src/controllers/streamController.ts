@@ -38,7 +38,7 @@ export async function createStreamToken(
 
     const name = streamChatDisplayName(
       localUser.role,
-      localUser.displayName ?? combined ?? clerkUser.username,
+      localUser.displayName ?? combined ?? clerkUser.username ?? null,
       localUser.email
     );
 

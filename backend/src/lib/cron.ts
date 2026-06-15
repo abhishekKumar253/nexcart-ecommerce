@@ -1,10 +1,11 @@
 import { CronJob } from "cron";
 import http from "node:http";
 import https from "node:https";
+import { getEnv } from "./env.js";
 
 // every 14 minutes send a GET request to the health endpoint
 const job = new CronJob("*/14 * * * *", function () {
-  const base = process.env.FRONTEND_URL;
+  const base = getEnv().FRONTEND_URL;
   if (!base) return;
   const url = new URL("/health", base).href;
   const client = url.startsWith("https:") ? https : http;
@@ -18,3 +19,4 @@ const job = new CronJob("*/14 * * * *", function () {
 });
 
 export default job;
+

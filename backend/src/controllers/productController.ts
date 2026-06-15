@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import { db } from "../db";
 import { products } from "../db/schema";
-import { and, desc, eq } from "drizzle-orm";
+import { and, eq, desc } from "drizzle-orm";
 
 export async function listProducts(
   req: Request,
@@ -36,13 +36,12 @@ export async function getCategories(
 ) {
   try {
     const rows = await db
-      .select({ category: products.category })
+      .selectDistinct({ category: products.category })
       .from(products)
-      .where(eq(products.active, true));
+      .where(eq(products.active, true))
+      .orderBy(products.category);
 
-    const categories = [...new Set(rows.map((r) => r.category))].sort((a, b) =>
-      a.localeCompare(b)
-    );
+    const categories = rows.map((r) => r.category);
 
     res.json({ categories });
   } catch (e) {
@@ -56,10 +55,12 @@ export async function getProductBySlug(
   next: NextFunction
 ) {
   try {
+    const slug = req.params.slug as string;
+
     const [row] = await db
       .select()
       .from(products)
-      .where(eq(products.slug, req.params.slug as string))
+      .where(eq(products.slug, slug))
       .limit(1);
 
     if (!row?.active) return res.status(404).json({ error: "Not found" });
