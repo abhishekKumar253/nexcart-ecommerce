@@ -12,9 +12,9 @@ if (dsn) {
     environment: process.env.NODE_ENV ?? "development",
     integrations: [nodeProfilingIntegration()],
     enableLogs: true,
-    tracesSampleRate: 1,
-    profileSessionSampleRate: 1,
+    tracesSampleRate: 0.1,
+    profileSessionSampleRate: 0.1,
     profileLifecycle: "trace",
-    sendDefaultPii: true,
+    sendDefaultPii: false,
   });
 }
