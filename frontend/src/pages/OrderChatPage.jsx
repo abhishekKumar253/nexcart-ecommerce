@@ -12,8 +12,6 @@ import {
   Window,
 } from "stream-chat-react";
 import "stream-chat-react/dist/css/index.css";
-import * as StreamChatReact from "stream-chat-react";
-console.log(Object.keys(StreamChatReact));
 
 function OrderChatPage() {
   const { paid, client, error, channel, canInvite, inviteMutation } =

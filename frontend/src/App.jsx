@@ -7,7 +7,6 @@ import CartPage from "./pages/CartPage";
 import OrdersPage from "./pages/OrdersPage";
 import CheckoutReturnPage from "./pages/CheckoutReturnPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
-import { SentryDemoPage } from "./pages/SentryDemoPage";
 import OrderDetailPage from "./pages/OrderDetailPage";
 import OrderSummaryPage from "./pages/OrderSummaryPage";
 import OrderChatPage from "./pages/OrderChatPage";
@@ -27,16 +26,14 @@ function App() {
         <Route path="/product/:slug" element={<ProductDetailPage />} />
         <Route
           path="/orders"
-          element={isSignedIn ? <OrdersPage /> : <Navigate to={"/"} replace />}
+          element={isSignedIn ? <OrdersPage /> : <Navigate to="/" replace />}
         />
         <Route path="/checkout/return" element={<CheckoutReturnPage />} />
-
-        <Route path="/demo-sentry" element={<SentryDemoPage />} />
 
         <Route
           path="/orders/:id/call"
           element={
-            isSignedIn ? <OrderVideoPage /> : <Navigate to={"/"} replace />
+            isSignedIn ? <OrderVideoPage /> : <Navigate to="/" replace />
           }
         />
 
@@ -48,7 +45,11 @@ function App() {
         />
 
         {/* NESTED ROUTES */}
-        <Route path="/orders/:id" element={<OrderDetailPage />}>
+        <Route
+          path="/orders/:id"
+          element={
+            isSignedIn ? <OrderDetailPage /> : <Navigate to="/" replace />
+          }>
           <Route index element={<OrderSummaryPage />} />
           <Route path="chat" element={<OrderChatPage />} />
         </Route>
