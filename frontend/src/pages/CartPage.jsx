@@ -1,5 +1,5 @@
 import {
-  AlertTriangleIcon, // 👈 Error icon add kiya
+  AlertTriangleIcon,
   HeadphonesIcon,
   LogInIcon,
   MinusIcon,
@@ -19,7 +19,7 @@ import { SignedIn, SignedOut, SignInButton } from "@clerk/clerk-react";
 function CartPage() {
   const {
     checkout,
-    checkoutError, 
+    checkoutError,
     checkoutLoading,
     items,
     lines,
@@ -105,10 +105,10 @@ function CartPage() {
                         onClick={() =>
                           setQty(
                             line.productId,
-                            Math.min(99, line.quantity + 1)
+                            Math.min(p?.stock ?? 99, line.quantity + 1)
                           )
                         }
-                        disabled={line.quantity >= 99}
+                        disabled={line.quantity >= (p?.stock ?? 99)}
                         aria-label="Increase quantity">
                         <PlusIcon className="size-4" aria-hidden />
                       </button>
