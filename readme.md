@@ -2,7 +2,7 @@
 
 A full-stack e-commerce platform built with a PERN stack (PostgreSQL, Express, React, Node.js). Features a product catalog, secure checkout, order management, real-time customer support chat, and video calling — all wired together with production-grade tooling.
 
-**Live demo:** [_add your Railway URL here_](https://nexcart-ecommerce-production.up.railway.app/)
+**Live demo:** [_add your Railway URL here_](https://nexcart-ecommerce-production.up.railway.app)
 
 ---
 
