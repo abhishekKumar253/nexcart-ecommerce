@@ -326,17 +326,20 @@ export function SentryDemoPage() {
       </h1>
       <p className="mt-3 text-base leading-relaxed text-base-content/70">
         Each button sends structured{" "}
-        <strong className="font-medium text-base-content/85">Logs</strong> (via{" "}
+        <strong className="font-medium text-base-content/85">Logs</strong>
+        {" (via "}
         <code className="rounded bg-base-300 px-1 py-0.5 text-xs">
           Sentry.logger
         </code>
-        ), <strong className="font-medium text-base-content/85">Issues</strong>{" "}
-        (via{" "}
+        {"), "}
+        <strong className="font-medium text-base-content/85">Issues</strong>
+        {" (via "}
         <code className="rounded bg-base-300 px-1 py-0.5 text-xs">
           captureException
         </code>
-        ), and breadcrumbs — useful for Replay, traces, and the Logs UI. Not
-        connected to real payments or webhooks.
+        {
+          "), and breadcrumbs — useful for Replay, traces, and the Logs UI. Not connected to real payments or webhooks."
+        }
       </p>
 
       <ul className="mt-8 divide-y divide-base-300 rounded-box border border-base-300 bg-base-100">
